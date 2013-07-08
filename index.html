@@ -1,19 +1,23 @@
-<html xmlns="http://www.w3.org/1999/xhtml" >
+<html xmlns="http://www.w3.org/1999/xhtml" > 
 <head>
 <title>Advanced Search Demo</title>
-	<link id="jquiCSS" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/ui-lightness/jquery-ui.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="css/demo.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="css/evol.advancedSearch.css" type="text/css" media="all" />
+	<link id="jquiCSS" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/ui-lightness/jquery-ui.css" type="text/css" media="all">
+	<link rel="stylesheet" href="css/demo.css" type="text/css" media="all">
+	<link rel="stylesheet" href="css/evol.advancedSearch.css" type="text/css" media="all">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js" type="text/javascript"></script>
-	<script src="https://raw.github.com/evoluteur/advancedSearch/master/js/evol.advancedSearch.js" type="text/javascript"></script>
-	<script src="https://raw.github.com/evoluteur/advancedSearch/master/js/model-demo1.js" type="text/javascript"></script> 
+
+	<script src="js/evol.advancedSearch.min.js" type="text/javascript"></script>
+	<script src="js/model-demo1.js" type="text/javascript"></script> 
 </head>
 <body>   
 
 <h1>Advanced Search Demo</h1> 
 
-<p>Theme: 
+<p>evol.advancedSearch is a Web UI for building structured search queries. It is a full jQuery UI widget, supporting various configurations and themes.
+</p>
+
+<p class="demo-links">Theme: 
 <a href="#" class="css">le-frog</a> - 
 <a href="#" class="css">redmond</a> - 
 <a href="#" class="css">start</a> - 
@@ -23,34 +27,51 @@
 
 <div id="evol"></div>
 	 
-<p>Tests: 
-<a href="#" id="addFilter">Add Filter</a> - <a href="#" id="delFilter">Remove First Filter</a>
-<br/>Value: 
-<a href="#" id="bVal">Val</a> - 
-<a href="#" id="bValText">Text Val</a> - 
-<a href="#" id="bValUrl">URL Val</a>
+<p class="demo-links">Tests: 
+<a href="#" id="addFilter">Add Filter</a> - 
+<a href="#" id="delFilter">Remove First Filter</a> - 
+<a href="#" id="empty">Empty</a> - 
+<a href="#" id="length">Number of Filters</a>
 </p>
+
+<p class="demo-links">Value: 
+<a href="#" id="bValText">Text Value</a> - 
+<a href="#" id="bVal">JSON Value</a> - 
+<a href="#" id="bValUrl">URL Value</a>
+</p>
+
+<p><textarea id="advSearchWidget" class="demoValue">
+
+</textarea>
 
 <script> 
 
+$(document).ready(function(){
+
+	// *****   setup theme links   *****
     $('.css').click(function(){
         $('#jquiCSS').attr('href','http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/'+this.innerHTML+'/jquery-ui.css');
     });
 
-    $('#evol').advancedSearch({fields:contacts }); 
+    // *****   setup advanced search widget   *****
+    $('#evol').advancedSearch({fields:contacts })
+    	.on('submit.search change.search', function(evt){
+    		$('#advSearchWidget').html($('#evol').advancedSearch('valText'));
+    	});
 	
+	// *****   setup values and tests links   *****
 	$('#bVal').click(function(){
-		var v=$('#evol').advancedSearch("val")
-		alert(JSON.stringify(v))
-	})
+		var v=$('#evol').advancedSearch("val");
+		$('#advSearchWidget').html(JSON.stringify(v));
+	});
 	$('#bValText').click(function(){
-		var v=$('#evol').advancedSearch("valText")
-		alert(v)
-	})
+		var v=$('#evol').advancedSearch("valText");
+		$('#advSearchWidget').html(v);
+	});
 	$('#bValUrl').click(function(){
-		var v=$('#evol').advancedSearch("valUrl")
-		alert(v)
-	})
+		var v=$('#evol').advancedSearch("valUrl");
+		$('#advSearchWidget').html(v);
+	});
 	$('#addFilter').click(function(){
 		var filterDef = {
 			field:{
@@ -58,27 +79,41 @@
 				value: 'Lastname'
 			},
 			operator:{
-				label: 'start w/',
+				label: 'starts with',
 				value: 'sw'
 			}, 
 			value:{
-				label: '"abc"',
-				value: 'abc'
+				label: '"jo"',
+				value: 'jo'
 			}
 		}
 		var v=$('#evol').advancedSearch("addFilter", filterDef);		
-	})
+	});
 	$('#delFilter').click(function(){
 		$('#evol').advancedSearch("removeFilter", 0);		
-	})
+	});
+	$('#empty').click(function(){
+		$('#evol').advancedSearch("empty");		
+	});
+	$('#length').click(function(){
+		var v=$('#evol').advancedSearch("length");
+		alert(v);
+	});
 	
+	// *****   Prevent links from scrolling   *****
+	$('.demo-links > a[href="#"]').attr('href', 'javascript:void(0)');
+
+});
+
 </script>
  
-
-<p><br/>See on GitHub: <a href="https://github.com/evoluteur/advancedSearch" target="download">https://github.com/evoluteur/advancedSearch</a></p>
+<p><br/>evol.advancedSearch is released under the <a href="http://github.com/evoluteur/advancedSearch/raw/master/LICENSE.md">MIT license</a>.</p>
+<p> 
+Download and Source code available at GitHub <a href="https://github.com/evoluteur/advancedSearch" target="download">https://github.com/evoluteur/advancedSearch</a>.</p>
+ 
 
 <br/><br/>
-<div class="footer">© 2012 Olivier Giulieri</div> 
+<div class="footer">&#169; 2013 Olivier Giulieri</div> 
 </body>
 
 </html>
