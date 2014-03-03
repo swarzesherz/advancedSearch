@@ -71,7 +71,9 @@ $(document).ready(function(){
     });
 
     // *****   setup advanced search widget   *****
-    $('#evol').advancedSearch({fields:contacts })
+    $('#evol').advancedSearch({
+    	fields:contacts,
+    	defaultOperator: 'eq' })
     	.on('submit.search change.search', function(evt){
     		updateValue(valueFormat);
     	});

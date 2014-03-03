@@ -15,6 +15,11 @@
 	font-weight: normal;
 }
 
+.lLight-Red{
+	font-weight: normal;
+	color: #FF0000;
+}
+
 .evo-searchFilters a{
 	-moz-border-radius: 14px;
 	-webkit-border-radius: 14px;

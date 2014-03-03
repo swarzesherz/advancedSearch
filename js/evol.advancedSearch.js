@@ -32,8 +32,8 @@
 		sAt:'at',
 		sNotAt:'not at',
 		sBetween:'between',
-		opAnd:'and',
-		//opOr:'or', 
+		opAnd:'AND',
+		opOr:'OR',
 		yes:'Yes',
 		no:'No',
 		bNewFilter:'New filter',
@@ -75,7 +75,8 @@ $.widget( 'evol.advancedSearch', {
 		highlight: true,
 		buttonLabels: false,
 		submitButton: false,
-		submitReady: false
+		submitReady: false,
+		defaultOperator: false
 	},
 
 	_create: function(){
@@ -158,6 +159,9 @@ $.widget( 'evol.advancedSearch', {
 			}else{
 				that._field=that._type=null;
 			}
+			if(that.options.defaultOperator){
+				$('#operator').val(that.options.defaultOperator).trigger('change').hide();
+			}
 		}).on('change', '#operator', function(evt){
 			evt.stopPropagation();
 			that._operator=$(this).val();
@@ -235,7 +239,7 @@ $.widget( 'evol.advancedSearch', {
 
 	addFilter: function(filter){
 		var f=$(['<a href="javascript:void(0)">',this._htmlFilter(filter),'</a>'].join(''))
-			.prependTo(this._filters)
+			.appendTo(this._filters)
 			.button({
 				icons: {secondary:'ui-icon-close'}
 			})
@@ -255,11 +259,15 @@ $.widget( 'evol.advancedSearch', {
 	},
 
 	_htmlFilter: function(filter){
-		var h=[
+		var h=[];
+		if(filter.andor){
+			h.push('<span class="lLight-Red">', filter.andor.label,'</span> ')
+		}
+		h.push(
 			'<span class="evo-lBold">', filter.field.label,'</span> ',
 			'<span class="evo-lLight">', filter.operator.label,'</span> ',
 			'<span class="evo-lBold">', filter.value.label, '</span>'
-		];
+		);
 		if(filter.operator.value==evoAPI.sBetween){
 			h.push('<span class="evo-lLight"> ', evoLang.opAnd, ' </span>',
 				'<span class="evo-lBold">', filter.value.label2, '</span>');
@@ -293,7 +301,11 @@ $.widget( 'evol.advancedSearch', {
 		this._removeEditor();
 		this._cFilter=$filter.button('disable');
 		var fType=this._getFieldById(fid).type;
-		this._setEditorField(fid);
+		if(!filter.andor){
+			this._setEditorField(fid);
+		}else{
+			this._setEditorField(fid, filter.andor.value);
+		}
 		this._setEditorOperator(op);
 		if(op==evoAPI.sBetween){
 			this._setEditorValue(fv.value, fv.value2);
@@ -304,16 +316,26 @@ $.widget( 'evol.advancedSearch', {
 		this._step=3;
 	},
 
-	_setEditorField: function(fid){
+	_setEditorField: function(fid, ao){
 		if(this._step<1){
+			var setAndOr = false;
 			this._bNew.stop().hide();
 			if(this._bSubmit){
 				this._bSubmit.stop().hide();
 			}
 			this._bDel.show();
+			if(this.length() < 2 || fid){
+				this._fList=null;
+			}
+			if((this.length() > 0 && !fid) || ao){
+				setAndOr = true;
+			}
 			if(!this._fList){
-				var fields=this.options.fields,
-					h=['<select id="field"><option value=""></option>'];
+				var fields=this.options.fields,h=[];
+				if(setAndOr){
+					h.push('<select id="andOr"><option value="and">'+evoLang.opAnd+'</option><option value="or">'+evoLang.opOr+'</option></select>');
+				}
+				h.push('<select id="field"><option value=""></option>');
 				for (var i=0,iMax=fields.length;i<iMax;i++){
 					var f=fields[i];
 					h.push(EvoUI.inputOption(f.id,f.label));
@@ -327,6 +349,9 @@ $.widget( 'evol.advancedSearch', {
 			this._field=this._getFieldById(fid);
 			this._type=this._field.type;
 			this._editor.find('#field').val(fid);
+		}
+		if(ao){
+			this._editor.find('#andOr').val(ao);
 		}
 		this._step=1;
 	},
@@ -466,6 +491,7 @@ $.widget( 'evol.advancedSearch', {
 		var e=this._editor,
 			f=e.find('#field'),
 			v=e.find('#value'),
+			ao=e.find('#andOr'),
 			filter={
 				field:{
 					label: f.find('option:selected').text(),
@@ -476,6 +502,12 @@ $.widget( 'evol.advancedSearch', {
 			},
 			op=filter.operator,
 			fv=filter.value;
+		if(ao.val()){
+			filter['andor'] = {
+				label: ao.find('option:selected').text(),
+				value: ao.val()
+			}
+		}
 		if(this._type==evoTypes.lov){
 			var vs=[], ls=[]; 
 			v.find('input:checked').not('#checkAll').each(function(){
@@ -489,7 +521,7 @@ $.widget( 'evol.advancedSearch', {
 			}else if(vs.length==1){
 				op.label=evoLang.sEqual;
 				op.value=evoAPI.sEqual;
-				fv.label='"'+ls[0]+'"';
+				fv.label=ls[0];
 				fv.value=vs[0];
 			}else{
 				op.label=evoLang.sInList;
@@ -514,7 +546,7 @@ $.widget( 'evol.advancedSearch', {
 				if(this._type==evoTypes.number || this._type==evoTypes.date || this._type==evoTypes.time){
 					fv.label=v.val();
 				}else{
-					fv.label='"'+v.val()+'"';
+					fv.label=v.val();
 				}
 				fv.value=v.val();
 				if(opVal==evoAPI.sBetween){
