@@ -204,10 +204,19 @@ $.widget( 'evol.advancedSearch', {
 		}).on('click', 'a .ui-button-icon-secondary', function(evt){
 			evt.stopPropagation();
 			var filter=$(this).parent();
+			var index=filter.index();
 			if(!filter.hasClass('ui-state-disabled')){
 				filter.fadeOut('slow',function(){
 					filter.remove();
 					that._triggerChange();
+				});
+			}
+			if(index == 0 && that.length() > 0){
+				nextFilter = that._filters.children().eq(1);
+				delete nextFilter.data('filter')['andor'];
+				nextFilter.button({
+					label : that._htmlFilter(nextFilter.data('filter')),
+					icons: {secondary:'ui-icon-close'}
 				});
 			}
 		});
