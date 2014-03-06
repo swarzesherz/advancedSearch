@@ -76,7 +76,8 @@ $.widget( 'evol.advancedSearch', {
 		buttonLabels: false,
 		submitButton: false,
 		submitReady: false,
-		defaultOperator: false
+		defaultOperator: false,
+		lang: evoLang
 	},
 
 	_create: function(){
@@ -85,6 +86,7 @@ $.widget( 'evol.advancedSearch', {
 			e=this.element,
 			h=['<div class="evo-searchFilters"></div>',
 				'<a class="evo-bNew" href="javascript:void(0)">',evoLang.bNewFilter,'</a>'];
+		evoLang = this.options.lang;
 		if(this.options.submitButton){
 			h.push('<a class="evo-bSubmit" href="javascript:void(0)">',evoLang.bSubmit,'</a>');
 		}
