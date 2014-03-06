@@ -318,6 +318,9 @@ $.widget( 'evol.advancedSearch', {
 			this._setEditorField(fid, filter.andor.value);
 		}
 		this._setEditorOperator(op);
+		if(this.options.defaultOperator){
+			$('#operator').val(this.options.defaultOperator).hide();
+		}
 		if(op==evoAPI.sBetween){
 			this._setEditorValue(fv.value, fv.value2);
 		}else{
