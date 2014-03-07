@@ -17,7 +17,7 @@ var contacts=[
 	{type:"text", id:"cell", label:"Mobile"},
 	{type:"text", id:"Address1", label:"Address"},
 	{type:"text", id:"City", label:"City"},
-	{type:"lov", id:"State", label:"State", 
+	{type:"lov", id:"State", label:"State", listSingle: true,
 		list:[ 
 			{id:"AL", label:"Alabama"},
 			{id:"AK", label:"Alaska"},

@@ -473,10 +473,11 @@ $.widget( 'evol.advancedSearch', {
 					switch (fType){
 						case evoTypes.lov:
 							h.push('<span id="value">');
-							if(this._field.list.length>7){
+							inputType='radio';
+							if(this._field.list.length>7 && !this._field.listSingle){
 								h.push('(<input type="checkbox" id="checkAll" value="1"/><label for="checkAll">All</label>) ');
 							}
-							h.push(EvoUI.inputCheckboxLOV(this._field.list));
+							h.push(EvoUI.inputLOV(this._field.list, !this._field.listSingle));
 							h.push('</span>');
 							break;
 						case evoTypes.bool:
@@ -715,11 +716,17 @@ var EvoUI={
 	inputOption:function(fID,fV){
 		return ['<option value="',fID,'">',fV,'</option>'].join('');
 	},
-	inputCheckboxLOV:function(fLOV){
-		var h=[]; 
+	inputLOV:function(fLOV, multiple){
+		var h=[],
+			iName='lov',
+			iType='radio';
+		if(multiple){
+			iType='checkbox';
+			iName = '';
+		}
 		for(var i in fLOV){
 			var lv=fLOV[i];
-			h.push('<input type="checkbox" id="',lv.id,'" value="',lv.id,'"/>',
+			h.push('<input name="'+iName+'" type="'+iType+'" id="',lv.id,'" value="',lv.id,'"/>',
 				'<label for="',lv.id,'">',lv.label,'</label> ');
 		}
 		return h.join('');

@@ -23,6 +23,7 @@ Each field is defined by:
     * operatorDefault - one value of type. ej: type: 'text', operatorDefault:'eq'
     * operatorHide - hide operator when set: true
     * operatorList - limit set of display operators: ['sEqual', 'sBetween']
+    * listSingle - choose only one option when set: true
 
 ### Conditions
 
