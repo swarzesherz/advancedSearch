@@ -20,10 +20,12 @@ Each field is defined by:
     * id - unique field id.
     * label - displayed field name.
     * type - field type: text, number, boolean, date, time, or lov (list of values or enum).
-    * operatorDefault - one value of type. ej: type: 'text', operatorDefault:'eq'
-    * operatorHide - hide operator when set: true
-    * operatorList - limit set of display operators: ['sEqual', 'sBetween']
+    * opDefault - one value of type. ej: type: 'text', operatorDefault:'eq'
+    * opHide - hide operator when set: true
+    * opList - limit set of display operators: ['sEqual', 'sBetween']
+    * opPlaceholder - string to description of select
     * listSingle - choose only one option when set: true
+    * listPlaceholder - string to description of select
 
 ### Conditions
 

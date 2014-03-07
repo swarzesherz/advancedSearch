@@ -1,6 +1,6 @@
 var contacts=[
-	{ type:"text", id:"Lastname", label:"Lastname", opDefault: 'lk', opHide: true},
-	{ type:"text", id:"Firstname", label:"Firstname", opPlaceholder: 'Choose operator'},
+	{ type:"text", id:"Lastname", label:"Lastname", opDefault: "lk", opHide: true},
+	{ type:"text", id:"Firstname", label:"Firstname", opPlaceholder: "Select operator"},
 	{ type:"boolean", id:"active", label:"Is active"},	
 	{ type:"number", id:"age", label:"Age"},		   
 	{type:"lov", id:"CategoryID", label:"Category",
@@ -12,12 +12,12 @@ var contacts=[
 			{id:'5',label:"Other"}
 		]
 	},
-	{type:"date", id:"bday", label:"Birthday", operatorList:['sEqual', 'sBetween']},
+	{type:"date", id:"bday", label:"Birthday", opList:["sEqual", "sBetween"]},
 	{type:"text", id:"phone", label:"Phone"},
 	{type:"text", id:"cell", label:"Mobile"},
 	{type:"text", id:"Address1", label:"Address"},
 	{type:"text", id:"City", label:"City"},
-	{type:"lov", id:"State", label:"State", listSingle: true,
+	{type:"lov", id:"State", label:"State", listSingle: true, listPlaceholder: "Select state",
 		list:[ 
 			{id:"AL", label:"Alabama"},
 			{id:"AK", label:"Alaska"},
@@ -73,7 +73,7 @@ var contacts=[
 		]
 	},
 	{type:"text", id:"Zip", label:"Zip"},
-	{type:"lov", id:"Country", label:"Country",
+	{type:"lov", id:"Country", label:"Country", listPlaceholder: "Select country",
 		list:[ 
 			{label: 'Afghanistan', id: 'AF'}, 
 			{label: 'Åland Islands', id: 'AX'}, 

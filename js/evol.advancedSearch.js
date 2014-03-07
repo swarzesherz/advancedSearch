@@ -32,7 +32,7 @@
 		sAt:'at',
 		sNotAt:'not at',
 		sBetween:'between',
-		sOpPlaceHolder: 'Choose operator',
+		sOpPlaceHolder: 'Select operator',
 		sLike:'like',
 		opAnd:'AND',
 		opOr:'OR',
@@ -82,7 +82,7 @@ $.widget( 'evol.advancedSearch', {
 		defaultOperator: false,
 		lang: evoLang,
 		enableSelect2: false,
-		placeholder: 'Choose field'
+		placeholder: 'Select field'
 	},
 
 	_create: function(){
@@ -148,6 +148,7 @@ $.widget( 'evol.advancedSearch', {
 		.on('change', '#field', function(evt){
 			evt.stopPropagation();
 			if(that._step>2){
+				that._editor.find('#lov').select2("destroy").remove();
 				that._editor.find('#value,#value2,.as-Txt').remove();
 			}
 			if(that._step>1){
@@ -220,7 +221,7 @@ $.widget( 'evol.advancedSearch', {
 					that._triggerChange();
 				});
 			}
-			if(index == 0 && that.length() > 0){
+			if(index == 0 && that.length() > 1){
 				nextFilter = that._filters.children().eq(1);
 				delete nextFilter.data('filter')['andor'];
 				nextFilter.button({
@@ -400,7 +401,7 @@ $.widget( 'evol.advancedSearch', {
 					break;
 				default:
 					h.push('<select id="operator"><option value=""></option>');
-					if(!this._field.operatorList){
+					if(!this._field.opList){
 						switch (fType){
 							case evoTypes.date:
 							case evoTypes.time:
@@ -432,7 +433,7 @@ $.widget( 'evol.advancedSearch', {
 						h.push(EvoUI.inputOption(evoAPI.sIsNull, evoLang.sIsNull),
 							EvoUI.inputOption(evoAPI.sIsNotNull, evoLang.sIsNotNull));
 					}else{
-						$.map(this._field.operatorList, function( val, i ) {
+						$.map(this._field.opList, function( val, i ) {
 							h.push(EvoUI.inputOption(evoAPI[val], evoLang[val]));
 						});
 					}
@@ -448,7 +449,7 @@ $.widget( 'evol.advancedSearch', {
 			$('#operator').hide();
 		}
 		if(this.options.enableSelect2 && !this._field.opHide){
-			if(!this._field.operatorList){
+			if(!this._field.opList){
 				$('#operator').select2({width:'element', placeholder: evoLang.sOpPlaceHolder});
 			}else{
 				$('#operator').select2({width:'element', placeholder: this._field.opPlaceholder});
@@ -545,7 +546,7 @@ $.widget( 'evol.advancedSearch', {
 				}
 			}
 			if(this.options.enableSelect2){
-				$('#lov').select2({width:'element'});
+				$('#lov').select2({width:'element', placeholder: this._field.listPlaceholder});
 			}
 			this._bAdd.button(addOK?'enable':'disable').show(); 
 			this._step=3;
