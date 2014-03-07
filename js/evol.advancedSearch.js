@@ -528,7 +528,6 @@ $.widget( 'evol.advancedSearch', {
 							}else{
 								$('#lov').val(v.split(','));
 							}
-							console.log($value);
 							break;
 						case evoTypes.bool:
 							$value.find('#value'+v).attr('checked', 'checked');
@@ -576,7 +575,6 @@ $.widget( 'evol.advancedSearch', {
 		}
 		if(this._type==evoTypes.lov){
 			var vs=[], ls=[]; 
-			console.log($('#lov').val());
 			if(!this.options.enableSelect2){
 				v.find('input:checked').not('#checkAll').each(function(){
 					vs.push(this.value);
