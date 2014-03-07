@@ -87,14 +87,14 @@ $.widget( 'evol.advancedSearch', {
 			that=this,
 			e=this.element,
 			h=['<div class="evo-searchFilters"></div>',
-				'<a class="evo-bNew" href="javascript:void(0)">',evoLang.bNewFilter,'</a>'];
+				'<a class="evo-bNew" href="javascript:;">',evoLang.bNewFilter,'</a>'];
 		evoLang = this.options.lang;
 		if(this.options.submitButton){
-			h.push('<a class="evo-bSubmit" href="javascript:void(0)">',evoLang.bSubmit,'</a>');
+			h.push('<a class="evo-bSubmit" href="javascript:;">',evoLang.bSubmit,'</a>');
 		}
 		h.push('<div class="evo-editFilter"></div>',
-				'<a class="evo-bAdd" style="display:none;" href="javascript:void(0)">',evoLang.bAddFilter,'</a>',
-				'<a class="evo-bDel" style="display:none;" href="javascript:void(0)">',evoLang.bCancel,'</a>');
+				'<a class="evo-bAdd" style="display:none;" href="javascript:;">',evoLang.bAddFilter,'</a>',
+				'<a class="evo-bDel" style="display:none;" href="javascript:;">',evoLang.bCancel,'</a>');
 		this._step=0;
 		e.addClass('evo-advSearch ui-widget-content ui-corner-all')
 			.html(h.join('')
@@ -256,7 +256,7 @@ $.widget( 'evol.advancedSearch', {
 	},
 
 	addFilter: function(filter){
-		var f=$(['<a href="javascript:void(0)">',this._htmlFilter(filter),'</a>'].join(''))
+		var f=$(['<a href="javascript:;">',this._htmlFilter(filter),'</a>'].join(''))
 			.appendTo(this._filters)
 			.button({
 				icons: {secondary:'ui-icon-close'}
