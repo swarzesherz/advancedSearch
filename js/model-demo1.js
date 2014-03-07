@@ -1,5 +1,5 @@
 var contacts=[
-	{ type:"text", id:"Lastname", label:"Lastname"},
+	{ type:"text", id:"Lastname", label:"Lastname", operatorDefault: 'lk', operatorHide: true},
 	{ type:"text", id:"Firstname", label:"Firstname"},
 	{ type:"boolean", id:"active", label:"Is active"},	
 	{ type:"number", id:"age", label:"Age"},		   
@@ -12,7 +12,7 @@ var contacts=[
 			{id:'5',label:"Other"}
 		]
 	},
-	{type:"date", id:"bday", label:"Birthday"},
+	{type:"date", id:"bday", label:"Birthday", operatorList:['sEqual', 'sBetween']},
 	{type:"text", id:"phone", label:"Phone"},
 	{type:"text", id:"cell", label:"Mobile"},
 	{type:"text", id:"Address1", label:"Address"},

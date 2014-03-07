@@ -20,6 +20,9 @@ Each field is defined by:
     * id - unique field id.
     * label - displayed field name.
     * type - field type: text, number, boolean, date, time, or lov (list of values or enum).
+    * operatorDefault - one value of type. ej: type: 'text', operatorDefault:'eq'
+    * operatorHide - hide operator when set: true
+    * operatorList - limit set of display operators: ['sEqual', 'sBetween']
 
 ### Conditions
 

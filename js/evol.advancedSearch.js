@@ -32,6 +32,7 @@
 		sAt:'at',
 		sNotAt:'not at',
 		sBetween:'between',
+		sLike:'like',
 		opAnd:'AND',
 		opOr:'OR',
 		yes:'Yes',
@@ -53,7 +54,8 @@
 		sIsNotNull:'nn',
 		sGreater:'gt',
 		sSmaller:'lt',
-		sBetween:'bw'
+		sBetween:'bw',
+		sLike:'lk'
 	},
 	evoTypes={
 		text:'text',
@@ -154,15 +156,20 @@ $.widget( 'evol.advancedSearch', {
 			if(fieldID!==''){
 				that._field=that._getFieldById(fieldID);
 				var fType=that._type=that._field.type;
-				that._setEditorOperator();
+				if(that._field.operatorDefault){
+					that._setEditorOperator(that._field.operatorDefault);
+					$('#operator').trigger('change');
+				}else{
+					that._setEditorOperator();
+				}
 				if(fType==evoTypes.lov || fType==evoTypes.bool){
 					that._setEditorValue();
 				}
+				if(that._field.operatorHide){
+					$('#operator').hide();
+				}
 			}else{
 				that._field=that._type=null;
-			}
-			if(that.options.defaultOperator){
-				$('#operator').val(that.options.defaultOperator).trigger('change').hide();
 			}
 		}).on('change', '#operator', function(evt){
 			evt.stopPropagation();
@@ -387,35 +394,42 @@ $.widget( 'evol.advancedSearch', {
 					break;
 				default:
 					h.push('<select id="operator"><option value=""></option>');
-					switch (fType){
-						case evoTypes.date:
-						case evoTypes.time:
-							if (fType==evoTypes.time){
-								h.push(EvoUI.inputOption(evoAPI.sEqual, evoLang.sAt),
-									EvoUI.inputOption(evoAPI.sNotEqual, evoLang.sNotAt));
-							}else{
-								h.push(EvoUI.inputOption(evoAPI.sEqual, evoLang.sOn),
-									EvoUI.inputOption(evoAPI.sNotEqual, evoLang.sNotOn));
-							}
-							h.push(EvoUI.inputOption(evoAPI.sGreater, evoLang.sAfter),
-								EvoUI.inputOption(evoAPI.sSmaller, evoLang.sBefore),
-								EvoUI.inputOption(evoAPI.sBetween, evoLang.sBetween));
-							break;
-						case evoTypes.number:
-							h.push(EvoUI.inputOption(evoAPI.sEqual, evoLang.sNumEqual),
-								EvoUI.inputOption(evoAPI.sNotEqual, evoLang.sNumNotEqual),
-								EvoUI.inputOption(evoAPI.sGreater, evoLang.sGreater),
-								EvoUI.inputOption(evoAPI.sSmaller, evoLang.sSmaller));
-							break;
-						default:
-							h.push(EvoUI.inputOption(evoAPI.sEqual, evoLang.sEqual),
-								EvoUI.inputOption(evoAPI.sNotEqual, evoLang.sNotEqual),
-								EvoUI.inputOption(evoAPI.sStart, evoLang.sStart),
-								EvoUI.inputOption(evoAPI.sContain, evoLang.sContain),
-								EvoUI.inputOption(evoAPI.sFinish, evoLang.sFinish));
+					if(!this._field.operatorList){
+						switch (fType){
+							case evoTypes.date:
+							case evoTypes.time:
+								if (fType==evoTypes.time){
+									h.push(EvoUI.inputOption(evoAPI.sEqual, evoLang.sAt),
+										EvoUI.inputOption(evoAPI.sNotEqual, evoLang.sNotAt));
+								}else{
+									h.push(EvoUI.inputOption(evoAPI.sEqual, evoLang.sOn),
+										EvoUI.inputOption(evoAPI.sNotEqual, evoLang.sNotOn));
+								}
+								h.push(EvoUI.inputOption(evoAPI.sGreater, evoLang.sAfter),
+									EvoUI.inputOption(evoAPI.sSmaller, evoLang.sBefore),
+									EvoUI.inputOption(evoAPI.sBetween, evoLang.sBetween));
+								break;
+							case evoTypes.number:
+								h.push(EvoUI.inputOption(evoAPI.sEqual, evoLang.sNumEqual),
+									EvoUI.inputOption(evoAPI.sNotEqual, evoLang.sNumNotEqual),
+									EvoUI.inputOption(evoAPI.sGreater, evoLang.sGreater),
+									EvoUI.inputOption(evoAPI.sSmaller, evoLang.sSmaller));
+								break;
+							default:
+								h.push(EvoUI.inputOption(evoAPI.sEqual, evoLang.sEqual),
+									EvoUI.inputOption(evoAPI.sLike, evoLang.sLike),
+									EvoUI.inputOption(evoAPI.sNotEqual, evoLang.sNotEqual),
+									EvoUI.inputOption(evoAPI.sStart, evoLang.sStart),
+									EvoUI.inputOption(evoAPI.sContain, evoLang.sContain),
+									EvoUI.inputOption(evoAPI.sFinish, evoLang.sFinish));
+						}
+						h.push(EvoUI.inputOption(evoAPI.sIsNull, evoLang.sIsNull),
+							EvoUI.inputOption(evoAPI.sIsNotNull, evoLang.sIsNotNull));
+					}else{
+						$.map(this._field.operatorList, function( val, i ) {
+							h.push(EvoUI.inputOption(evoAPI[val], evoLang[val]));
+						});
 					}
-					h.push(EvoUI.inputOption(evoAPI.sIsNull, evoLang.sIsNull),
-						EvoUI.inputOption(evoAPI.sIsNotNull, evoLang.sIsNotNull));
 					h.push('</select>');
 			}
 			this._editor.append(h.join(''));
