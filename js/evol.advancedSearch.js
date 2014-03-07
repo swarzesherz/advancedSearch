@@ -376,9 +376,9 @@ $.widget( 'evol.advancedSearch', {
 		}
 		if(this.options.enableSelect2){
 			if(setAndOr){
-				$('#andOr').select2();
+				$('#andOr').select2({width:'element'});
 			}
-			$('#field').select2({placeholder: this.options.placeholder});
+			$('#field').select2({width:'element', placeholder: this.options.placeholder});
 		}
 		this._step=1;
 	},
@@ -449,9 +449,9 @@ $.widget( 'evol.advancedSearch', {
 		}
 		if(this.options.enableSelect2 && !this._field.opHide){
 			if(!this._field.operatorList){
-				$('#operator').select2({placeholder: evoLang.sOpPlaceHolder});
+				$('#operator').select2({width:'element', placeholder: evoLang.sOpPlaceHolder});
 			}else{
-				$('#operator').select2({placeholder: this._field.opPlaceholder});
+				$('#operator').select2({width:'element', placeholder: this._field.opPlaceholder});
 			}
 		}
 		this._step=2;
@@ -472,13 +472,26 @@ $.widget( 'evol.advancedSearch', {
 					opBetween=opVal==evoAPI.sBetween;
 					switch (fType){
 						case evoTypes.lov:
-							h.push('<span id="value">');
-							inputType='radio';
-							if(this._field.list.length>7 && !this._field.listSingle){
-								h.push('(<input type="checkbox" id="checkAll" value="1"/><label for="checkAll">All</label>) ');
+							if(!this.options.enableSelect2){
+								h.push('<span id="value">');
+								inputType='radio';
+								if(this._field.list.length>7 && !this._field.listSingle){
+									h.push('(<input type="checkbox" id="checkAll" value="1"/><label for="checkAll">All</label>) ');
+								}
+								h.push(EvoUI.inputLOV(this._field.list, !this._field.listSingle));
+								h.push('</span>');
+							}else{
+								selectMultiple = '';
+								if(!this._field.listSingle){
+									selectMultiple = 'multiple';
+								}
+								h.push('<select id="lov" '+selectMultiple+'>', '<option></option>');
+								for(var i in this._field.list){
+									var lv=this._field.list[i];
+									h.push('<option value="'+lv.id+'">'+lv.label+'</option>');
+								}
+								h.push('</select>');
 							}
-							h.push(EvoUI.inputLOV(this._field.list, !this._field.listSingle));
-							h.push('</span>');
 							break;
 						case evoTypes.bool:
 							h.push('<span id="value">',
@@ -510,7 +523,12 @@ $.widget( 'evol.advancedSearch', {
 					var $value=editor.find('#value');
 					switch (fType){
 						case evoTypes.lov:
-							$value.find('#'+v.split(',').join(',#')).attr('checked', 'checked');
+							if(!this.options.enableSelect2){
+								$value.find('#'+v.split(',').join(',#')).attr('checked', 'checked');
+							}else{
+								$('#lov').val(v.split(','));
+							}
+							console.log($value);
 							break;
 						case evoTypes.bool:
 							$value.find('#value'+v).attr('checked', 'checked');
@@ -526,6 +544,9 @@ $.widget( 'evol.advancedSearch', {
 				}else{
 					addOK=(fType==evoTypes.lov || fType==evoTypes.bool);
 				}
+			}
+			if(this.options.enableSelect2){
+				$('#lov').select2({width:'element'});
 			}
 			this._bAdd.button(addOK?'enable':'disable').show(); 
 			this._step=3;
@@ -555,10 +576,18 @@ $.widget( 'evol.advancedSearch', {
 		}
 		if(this._type==evoTypes.lov){
 			var vs=[], ls=[]; 
-			v.find('input:checked').not('#checkAll').each(function(){
-				vs.push(this.value);
-				ls.push(this.nextSibling.innerHTML);
-			});
+			console.log($('#lov').val());
+			if(!this.options.enableSelect2){
+				v.find('input:checked').not('#checkAll').each(function(){
+					vs.push(this.value);
+					ls.push(this.nextSibling.innerHTML);
+				});
+			}else{
+				$('#lov option:selected').each(function(){
+					vs.push($(this).val());
+					ls.push($(this).text());
+				});
+			}
 			if(vs.length===0){
 				op.label=evoLang.sIsNull;
 				op.value=evoAPI.sIsNull;
