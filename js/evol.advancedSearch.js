@@ -32,6 +32,7 @@
 		sAt:'at',
 		sNotAt:'not at',
 		sBetween:'between',
+		sOpPlaceHolder: 'Choose operator',
 		sLike:'like',
 		opAnd:'AND',
 		opOr:'OR',
@@ -79,7 +80,9 @@ $.widget( 'evol.advancedSearch', {
 		submitButton: false,
 		submitReady: false,
 		defaultOperator: false,
-		lang: evoLang
+		lang: evoLang,
+		enableSelect2: false,
+		placeholder: 'Choose field'
 	},
 
 	_create: function(){
@@ -156,17 +159,14 @@ $.widget( 'evol.advancedSearch', {
 			if(fieldID!==''){
 				that._field=that._getFieldById(fieldID);
 				var fType=that._type=that._field.type;
-				if(that._field.operatorDefault){
-					that._setEditorOperator(that._field.operatorDefault);
+				if(that._field.opDefault){
+					that._setEditorOperator(that._field.opDefault);
 					$('#operator').trigger('change');
 				}else{
 					that._setEditorOperator();
 				}
 				if(fType==evoTypes.lov || fType==evoTypes.bool){
 					that._setEditorValue();
-				}
-				if(that._field.operatorHide){
-					$('#operator').hide();
 				}
 			}else{
 				that._field=that._type=null;
@@ -338,8 +338,8 @@ $.widget( 'evol.advancedSearch', {
 	},
 
 	_setEditorField: function(fid, ao){
+		var setAndOr = false;
 		if(this._step<1){
-			var setAndOr = false;
 			this._bNew.stop().hide();
 			if(this._bSubmit){
 				this._bSubmit.stop().hide();
@@ -373,6 +373,12 @@ $.widget( 'evol.advancedSearch', {
 		}
 		if(ao){
 			this._editor.find('#andOr').val(ao);
+		}
+		if(this.options.enableSelect2){
+			if(setAndOr){
+				$('#andOr').select2();
+			}
+			$('#field').select2({placeholder: this.options.placeholder});
 		}
 		this._step=1;
 	},
@@ -437,6 +443,16 @@ $.widget( 'evol.advancedSearch', {
 		if(cond && fType!=evoTypes.lov){
 			this._editor.find('#operator').val(cond); 
 			this._operator=cond;
+		}
+		if(this._field.opHide){
+			$('#operator').hide();
+		}
+		if(this.options.enableSelect2 && !this._field.opHide){
+			if(!this._field.operatorList){
+				$('#operator').select2({placeholder: evoLang.sOpPlaceHolder});
+			}else{
+				$('#operator').select2({placeholder: this._field.opPlaceholder});
+			}
 		}
 		this._step=2;
 	},

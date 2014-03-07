@@ -2,11 +2,12 @@
 <head>
 <title>Advanced Search Demo</title>
 	<link id="jquiCSS" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-lightness/jquery-ui.css" type="text/css" media="all">
+	<link rel="stylesheet" href="http://ivaynberg.github.io/select2/select2-3.4.5/select2.css"/>
 	<link rel="stylesheet" href="css/demo.css" type="text/css" media="all">
-	<link rel="stylesheet" href="css/evol.advancedSearch.css" type="text/css" media="all">
+	<link rel="stylesheet" href="css/evol.advancedSearch.css" type="text/css" >
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript"></script>
-
+	<script src="http://ivaynberg.github.io/select2/select2-3.4.5/select2.min.js"></script>
 	<script src="js/evol.advancedSearch.js" type="text/javascript"></script>
 	<script src="js/model-demo1.js" type="text/javascript"></script> 
 </head>
@@ -73,7 +74,8 @@ $(document).ready(function(){
     // *****   setup advanced search widget   *****
     $('#evol').advancedSearch({
 				fields:contacts,
-    			lang: {sLike: '&asymp;'}
+    			lang: {sLike: '&asymp;'},
+    			enableSelect2: true
     		})
     	.on('submit.search change.search', function(evt){
     		updateValue(valueFormat);

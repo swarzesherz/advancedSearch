@@ -1,6 +1,6 @@
 var contacts=[
-	{ type:"text", id:"Lastname", label:"Lastname", operatorDefault: 'lk', operatorHide: true},
-	{ type:"text", id:"Firstname", label:"Firstname"},
+	{ type:"text", id:"Lastname", label:"Lastname", opDefault: 'lk', opHide: true},
+	{ type:"text", id:"Firstname", label:"Firstname", opPlaceholder: 'Choose operator'},
 	{ type:"boolean", id:"active", label:"Is active"},	
 	{ type:"number", id:"age", label:"Age"},		   
 	{type:"lov", id:"CategoryID", label:"Category",
