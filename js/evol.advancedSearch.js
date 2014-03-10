@@ -449,7 +449,7 @@ $.widget( 'evol.advancedSearch', {
 			$('#operator').hide();
 		}
 		if(this.options.enableSelect2 && !this._field.opHide){
-			if(!this._field.opList){
+			if(!this._field.opPlaceholder){
 				$('#operator').select2({width:'element', placeholder: evoLang.sOpPlaceHolder});
 			}else{
 				$('#operator').select2({width:'element', placeholder: this._field.opPlaceholder});
