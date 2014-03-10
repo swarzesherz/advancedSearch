@@ -130,10 +130,12 @@ $.widget( 'evol.advancedSearch', {
 				icons: {secondary:'ui-icon-check'}
 			}).on('click', function(evt){
 				var data=that._getEditorData();
-				if(that._cFilter){
-					that._enableFilter(data, that.options.highlight);
-				}else{
-					that.addFilter(data);
+				if(data){
+					if(that._cFilter){
+						that._enableFilter(data, that.options.highlight);
+					}else{
+						that.addFilter(data);
+					}
 				}
 				that._removeEditor();
 			});
@@ -454,6 +456,7 @@ $.widget( 'evol.advancedSearch', {
 			$('#operator').hide();
 		}
 		if(this.options.enableSelect2 && !this._field.opHide){
+			console.log(this._field);
 			if(!this._field.opPlaceholder){
 				$('#operator').select2({width:'element', placeholder: evoLang.sOpPlaceHolder});
 			}else{
@@ -592,7 +595,9 @@ $.widget( 'evol.advancedSearch', {
 					ls.push($(this).text());
 				});
 			}
-			if(vs.length===0){
+			if (vs.length===0 && !this._field.allowNull){
+				return false;
+			}else if(vs.length===0 && this._field.allowNull){
 				op.label=evoLang.sIsNull;
 				op.value=evoAPI.sIsNull;
 				fv.label=fv.value='';

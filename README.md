@@ -26,6 +26,7 @@ Each field is defined by:
     * opPlaceholder - string to description of select
     * listSingle - choose only one option when set: true
     * listPlaceholder - string to description of select
+    * allowNull - set true if allow null in list
 
 ### Conditions
 

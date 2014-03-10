@@ -73,7 +73,7 @@ var contacts=[
 		]
 	},
 	{type:"text", id:"Zip", label:"Zip"},
-	{type:"lov", id:"Country", label:"Country", listPlaceholder: "Select country",
+	{type:"lov", id:"Country", label:"Country", listPlaceholder: "Select country", allowNull: false,
 		list:[ 
 			{label: 'Afghanistan', id: 'AF'}, 
 			{label: 'Åland Islands', id: 'AX'}, 
