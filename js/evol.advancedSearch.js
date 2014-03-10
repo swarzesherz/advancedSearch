@@ -148,10 +148,15 @@ $.widget( 'evol.advancedSearch', {
 		.on('change', '#field', function(evt){
 			evt.stopPropagation();
 			if(that._step>2){
-				that._editor.find('#lov').select2("destroy").remove();
+				if(that.options.enableSelect2){
+					that._editor.find('#lov,#value,#value2').select2("destroy").remove();
+				}
 				that._editor.find('#value,#value2,.as-Txt').remove();
 			}
 			if(that._step>1){
+				if(that.options.enableSelect2){
+					that._editor.find('#operator').select2("destroy");
+				}
 				that._editor.find('#operator').remove();
 				that._bAdd.hide();
 			}
