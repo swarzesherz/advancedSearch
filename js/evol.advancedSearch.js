@@ -193,8 +193,10 @@ $.widget( 'evol.advancedSearch', {
 			var type=that._type,
 				value=$(this).val(),
 				valid=(value!=='') || type==evoTypes.lov || type==evoTypes.bool;
-			if(type==evoTypes.number){
-				valid=valid && !isNaN(value);
+			if(type==evoTypes.number && that._operator==evoAPI.sBetween){
+				valid=valid && !isNaN(that._editor.find('#value').val()) && !isNaN(that._editor.find('#value2').val());
+			}else if(type==evoTypes.number){
+
 			}else if(that._operator==evoAPI.sBetween){
 				valid=that._editor.find('#value').val()!=='' && that._editor.find('#value2').val()!=='';
 			}
@@ -228,9 +230,9 @@ $.widget( 'evol.advancedSearch', {
 					that._triggerChange();
 				});
 			}
-			if(index == 0 && that.length() > 1){
+			if(index === 0 && that.length() > 1){
 				nextFilter = that._filters.children().eq(1);
-				delete nextFilter.data('filter')['andor'];
+				delete nextFilter.data('filter').andor;
 				nextFilter.button({
 					label : that._htmlFilter(nextFilter.data('filter')),
 					icons: {secondary:'ui-icon-close'}
@@ -287,7 +289,7 @@ $.widget( 'evol.advancedSearch', {
 	_htmlFilter: function(filter){
 		var h=[];
 		if(filter.andor){
-			h.push('<span class="lLight-Red">', filter.andor.label,'</span> ')
+			h.push('<span class="lLight-Red">', filter.andor.label,'</span> ');
 		}
 		h.push(
 			'<span class="evo-lBold">', filter.field.label,'</span> ',
@@ -456,7 +458,6 @@ $.widget( 'evol.advancedSearch', {
 			$('#operator').hide();
 		}
 		if(this.options.enableSelect2 && !this._field.opHide){
-			console.log(this._field);
 			if(!this._field.opPlaceholder){
 				$('#operator').select2({width:'element', placeholder: evoLang.sOpPlaceHolder});
 			}else{
@@ -577,10 +578,10 @@ $.widget( 'evol.advancedSearch', {
 			op=filter.operator,
 			fv=filter.value;
 		if(ao.val()){
-			filter['andor'] = {
+			filter.andor = {
 				label: ao.find('option:selected').text(),
 				value: ao.val()
-			}
+			};
 		}
 		if(this._type==evoTypes.lov){
 			var vs=[], ls=[]; 

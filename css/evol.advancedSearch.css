@@ -48,6 +48,7 @@
 	margin-left:5px;
 }
 .evo-editFilter input[type="number"]#value,
+.evo-editFilter input[type="number"]#value2,
 .evo-editFilter input[type="time"]#value,
 .evo-editFilter input[type="time"]#value2 {
 	width:6em;

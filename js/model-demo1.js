@@ -2,7 +2,7 @@ var contacts=[
 	{ type:"text", id:"Lastname", label:"Lastname", opDefault: "lk", opHide: true},
 	{ type:"text", id:"Firstname", label:"Firstname", opPlaceholder: "Select operator"},
 	{ type:"boolean", id:"active", label:"Is active"},	
-	{ type:"number", id:"age", label:"Age"},		   
+	{ type:"number", id:"age", label:"Age", opList:["sEqual", "sBetween"]},
 	{type:"lov", id:"CategoryID", label:"Category",
 		list:[
 			{id:'1',label:"Friends"},
