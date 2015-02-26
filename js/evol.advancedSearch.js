@@ -355,7 +355,7 @@ $.widget( 'evol.advancedSearch', {
 				this._bSubmit.stop().hide();
 			}
 			this._bDel.show();
-			if(this.length() < 2 || fid){
+			if(this.length() > 0 || fid){
 				this._fList=null;
 			}
 			if((this.length() > 0 && !fid) || ao){
